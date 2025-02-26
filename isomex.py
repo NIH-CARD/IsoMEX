@@ -20,7 +20,7 @@ Usage:
     python script.py <basename> [--isoform_category CAT1,CAT2] [--output_dir OUTPUT]
 
 Example:
-    python script.py sample1 --isoform_category "full-splice_match,novel_in_catalog" --output_dir results
+    python script.py sample1 --isoform_category "full-splice_match,incomplete-splice_match" --output_dir results
 """
 
 import argparse
@@ -85,8 +85,8 @@ def create_mex_matrices(df, group_by, output_prefix, gene_map=None, transcript_m
       - df: the merged pandas DataFrame
       - group_by: the column to aggregate by ("gene" or "transcript")
       - output_prefix: output directory where files will be saved
-      - gene_level_map: dictionary mapping gene names to (gene_id, gene_name); used if group_by=="gene".
-      - transcript_level_map: dictionary mapping transcript names to (transcript_id, transcript_name); used if group_by=="transcript".
+      - gene_map: dictionary mapping gene names to (gene_id, gene_name); used if group_by=="gene".
+      - transcript_map: dictionary mapping transcript names to (transcript_id, transcript_name); used if group_by=="transcript".
     
     The function automatically sets:
       - feature_type_label = "Gene Expression" if group_by=="gene", or
@@ -177,7 +177,7 @@ def main():
     parser.add_argument("--transcript_map", type=str, default=None,
                         help="Path to the transcript mapping file (tab-delimited with columns: transcript_id, transcript_name)")
     parser.add_argument("--filter_category", type=str, default=None,
-                        help="Comma-separated list of categories to include (filters the 'category' column)")
+                        help="OPTIONAL: Comma-separated list of categories to include (filters the 'category' column). Default: None")
     parser.add_argument("--output_dir", type=str, default="output",
                         help="Directory to store output MEX directories")
     args = parser.parse_args()
@@ -191,20 +191,20 @@ def main():
     df = load_data(args.base)
     df = filter_data(df, filter_categories)
     
-    gene_level_map = None
-    transcript_level_map = None
+    gene_map = None
+    transcript_map = None
     if args.gene_map:
-        gene_level_map = load_gene_map(args.gene_map)
+        gene_map = load_gene_map(args.gene_map)
     if args.transcript_map:
-        transcript_level_map = load_transcript_map(args.transcript_map)
+        transcript_map = load_transcript_map(args.transcript_map)
     
     # Create gene-level MEX matrix.
     create_mex_matrices(df, group_by="gene", output_prefix=args.output_dir,
-                        gene_level_map=gene_level_map, transcript_level_map=transcript_level_map)
+                        gene_map=gene_map, transcript_map=transcript_map)
     
     # Create transcript-level MEX matrix.
     create_mex_matrices(df, group_by="transcript", output_prefix=args.output_dir,
-                        gene_level_map=gene_level_map, transcript_level_map=transcript_level_map)
+                        gene_map=gene_map, transcript_map=transcript_map)
     
 if __name__ == "__main__":
     main()
