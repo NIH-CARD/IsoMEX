@@ -6,9 +6,6 @@
 #SBATCH --mem=32G
 #SBATCH --array=1-$(wc -l < samples.txt)  # Dynamically set array size
 
-#submit via
-# filtered_feature_bc_matrix
-
 # Load the sample list into an array
 SAMPLES=($(cat samples.txt))
 
