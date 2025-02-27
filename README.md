@@ -5,7 +5,7 @@ IsoMEX is a stand-alone Python tool that converts IsoSeq/pigeon make-seurat outp
 ## Overview
 
 The isomex.py script:
-- Loads two tab-delimited files with a common basename (Note that while they have the ".csv" extension, they are actually tab-delimited.):
+- Loads two tab-delimited files, [outputs from `pigeon make-seurat`](https://isoseq.how/classification/pigeon-output.html), with a common basename (Note that while they have the ".csv" extension, they are actually tab-delimited.):
   - `<basename>.info.csv`
   - `<basename>.annotated.info.csv`
 - Merges these files on the `id` column.
@@ -28,7 +28,7 @@ It produces two sets of output directories with the filtered feature-barcode mat
 - **Filter by Isoform Classification Category:**  
   Allows filtering based on SQANTI3 isoform classification categories, such as `full-splice_match`, `novel_in_catalog`, or `antisense`. See the full list of categories: [Iso-Seq Classification](https://isoseq.how/classification/categories.html).
 
-- **Consistent Feature Annotation:**
+- **Consistent Gene and Transcript Feature Annotation:**
   Uses gene and transcript mapping files to ensure feature names and IDs are preserved while still allowing novel genes and transcripts to be included in the output.
   
 - **Compressed Output:**  
